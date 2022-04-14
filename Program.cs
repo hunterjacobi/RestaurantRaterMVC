@@ -21,6 +21,7 @@ namespace RestaurantRaterMVC
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5200", "https://localhost:5201");
                 });
     }
 }
