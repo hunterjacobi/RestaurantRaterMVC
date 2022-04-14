@@ -77,5 +77,42 @@ namespace RestaurantRaterMVC.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Restaurant restaurant = await _context.Restaurants.FindAsync(id);
+
+            if (restaurant == null)
+                return RedirectToAction(nameof(Index));
+
+            RestaurantEdit restaurantEdit = new RestaurantEdit()
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                Location = restaurant.Location,
+            };
+
+            return View(restaurantEdit);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, RestaurantEdit model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+
+            Restaurant restaurant = await _context.Restaurants.FindAsync(id);
+
+            if (restaurant == null)
+                return RedirectToAction(nameof(Index));
+
+            restaurant.Name = model.Name;
+            restaurant.Location = model.Location;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = restaurant.Id });
+        }
     }
 }
